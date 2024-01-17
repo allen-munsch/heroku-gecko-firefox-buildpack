@@ -1,26 +1,6 @@
 #!/usr/bin/env bash
 # bin/compile <build-dir> <cache-dir>
 
-echo "X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fICAgX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX1
-9fX19fX19fX19fX19fX19fX19fX19fX19fX19fXw0KNyAgICAgNzcg
-IDcgIDc3ICBfICA3NyAgICAgNzcgICAgIDc3ICA3ICAgNyAgXyAgNz
-cgIF8gIDc3ICAgICA3NyAgXyAgNzcgIF8gIDc3ICAgICAgNzcgICAg
-IDc3ICBfICA3NyAgNyAgNw0KfCAgLSAgfHwgICEgIHx8ICAgIF98fC
-AgNyAgfHwgIF8gIHx8ICB8ICAgfCAgXyAgfHwgICBfX3x8ICA3ICB8
-fCAgICBffHwgIF8gIHwhX18gIF9fIXwgIDcgIHx8ICAgIF98fCAgIS
-AgfA0KfCAgX19fISFfICAgXyF8ICBfIFwgfCAgfCAgfHwgIDcgIHx8
-ICAhX19ffCAgNyAgfHwgIF8gIHx8ICB8ICB8fCAgXyBcIHwgIDcgIH
-wgIDcgIDcgIHwgIHwgIHx8ICBfIFwgIV8gICBfIQ0KfCAgNyAgICA3
-ICAgNyB8ICA3ICB8fCAgISAgfHwgIHwgIHx8ICAgICA3fCAgfCAgfH
-wgIDcgIHx8ICAhICB8fCAgNyAgfHwgIHwgIHwgIHwgIHwgIHwgICEg
-IHx8ICA3ICB8IDcgICA3IA0KIV9fISAgICAhX19fISAhX18hX18hIV
-9fX19fISFfXyFfXyEhX19fX18hIV9fIV9fISFfX19fXyEhX19fX18h
-IV9fIV9fISFfXyFfXyEgICFfXyEgICFfX19fXyEhX18hX18hICFfX1
-8hIA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC
-AgICAgICAgICAgICAgICAgICAgICAgICAgICAgIA==" |base64 -d
-
 echo -en '\n'
 
 # Fail fast
@@ -56,8 +36,8 @@ function indent() {
 # Config
 # Hardcoded available stable versions
 # Use it to manually update the version as per https://firefox-source-docs.mozilla.org/testing/geckodriver/Support.html
-VERSION_FIREFOX=82.0.3
-VERSION_GECKODRIVER=0.28.0
+VERSION_FIREFOX=latest
+VERSION_GECKODRIVER=0.34.0
 LANG=en-US
 PLATFORM=linux64
 
@@ -66,12 +46,12 @@ ARCHIVE_NAME_FIREFOX=firefox
 ARCHIVE_NAME_GECKODRIVER=geckodriver
 FILE_NAME_FIREFOX=${ARCHIVE_NAME_FIREFOX}-${VERSION_FIREFOX}.tar.bz2
 FILE_NAME_GECKODRIVER=${ARCHIVE_NAME_GECKODRIVER}-v${VERSION_GECKODRIVER}-${PLATFORM}.tar.gz
-BUILDPACK_FIREFOX_PACKAGE="https://download.mozilla.org/?product=firefox-${VERSION_FIREFOX}-SSL&os=${PLATFORM}&lang=${LANG}"
+BUILDPACK_FIREFOX_PACKAGE="https://download.mozilla.org/?product=firefox-${VERSION_FIREFOX}-ssl&os=${PLATFORM}&lang=${LANG}"
 BUILDPACK_GECKODRIVER_PACKAGE="https://github.com/mozilla/geckodriver/releases/download/v${VERSION_GECKODRIVER}/${FILE_NAME_GECKODRIVER}"
 
 # Install correct dependencies according to $STACK	
 case "$STACK" in	
-  "heroku-16" | "heroku-18" | "heroku-20")	
+  "heroku-20" | "heroku-22")	
     PACKAGES="	
       libappindicator1	
       libasound2	
@@ -98,8 +78,8 @@ case "$STACK" in
       fonts-liberation	
     "
     ;;	
-  *)	
-    error "Heroku stack must be 'heroku-16', heroku-18 or 'heroku-20'"	
+  *)
+    error "Heroku stack must be 'heroku-20' or 'heroku-22'"	
 esac
 
 if [ ! -f $CACHE_DIR/PURGED_CACHE_V1 ]; then
